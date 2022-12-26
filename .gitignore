@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Generated files
+scripts/**
+
+# local files
+backups/**
+tmp/**
+temp/**
+

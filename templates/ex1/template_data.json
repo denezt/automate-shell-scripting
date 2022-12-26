@@ -7,7 +7,7 @@
     "i": 0,
     "option": "$1"
   },
-  "conditions" : [ 
+  "conditions" : [
     {
       "type" : "if",
       "goal" : "1 == 1",
@@ -20,13 +20,13 @@
       "goal" : "option",
       "switch" : [
         {
-          "-a": "printf 'enter statement for value (-a)\\n'" 
+          "-a": "printf 'enter statement for value (-a)\\n'"
         },
-        { 
-          "-b": "printf 'enter statement for value (-b)\\n'" 
+        {
+          "-b": "printf 'enter statement for value (-b)\\n'"
         },
-        { 
-          "-c": "printf 'enter statement for value -c\\n'" 
+        {
+          "-c": "printf 'enter statement for value -c\\n'"
         }
       ]
     },
@@ -36,10 +36,10 @@
       "run" : [
         {
           "type" : "parameter",
-          "printf": "loop...\\n" 
+          "printf": "loop...\\n"
         },{
           "type" : "declare",
-          "i": "$((i+1))" 
+          "i": "$((i+1))"
         }
       ]
     },{
@@ -47,13 +47,13 @@
       "goal" : "b",
       "switch" : [
         {
-          "-a": "printf 'enter statement for value (-a)\\n'" 
+          "-a": "printf 'enter statement for value (-a)\\n'"
         },
-        { 
-          "-b": "printf 'enter statement for value (-b)\\n'" 
+        {
+          "-b": "printf 'enter statement for value (-b)\\n'"
         },
-        { 
-          "*": "printf 'No value was entered\\n'" 
+        {
+          "*": "printf 'No value was entered\\n'"
         }
       ]
     },
@@ -66,7 +66,7 @@
           "j": "$((j+1))"
         },{
           "type" : "parameter",
-          "printf": "loop $j\\n" 
+          "printf": "loop $j\\n"
         }
       ]
     }

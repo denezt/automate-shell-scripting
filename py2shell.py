@@ -1,7 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
+import os
 import argparse
-from TemplateBuilder import TemplateBuilder
+from auto_shell_scripting import TemplateBuilder as TemplateBuilder
 
 # Set Program Parameters
 parser = argparse.ArgumentParser()
@@ -15,13 +16,15 @@ output = args.output
 
 if '__main__' == __name__:
   if output.endswith('.sh') and datasource.endswith('.json'):
-    templateBuilder = TemplateBuilder(value="", collector="")
+    templateBuilder = TemplateBuilder.TemplateBuilder(value="", collector="")
     template_data = templateBuilder.getTemplateData(datasource=datasource)
     # Generate the template
     template = templateBuilder.generate_template(template_data)
     print(template)
     # Write the template to a file
     if output.endswith('.sh'):
-      with open(output, "w") as f:
+      if not os.path.exists("scripts"):
+        os.mkdir("scripts")
+      with open("scripts/{}".format(output), "w") as f:
         f.write(template)
       print("Template generated successfully!")
