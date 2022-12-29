@@ -25,7 +25,7 @@ class TemplateBuilder:
                 for k,v in value.items():
                     run = "{} \"{}\"".format(k, v)
         if run:
-            statement_builder += "\n"       
+            statement_builder += "\n"
             statement_builder += "if [ {} ]; then\n".format(goal)
             statement_builder += "\t{}\n".format(run)
             statement_builder += "fi\n"
@@ -93,13 +93,13 @@ class TemplateBuilder:
             elif run_type == "declare" and key != "type":
                 line_statement += "\t{}={}\n".format(key, value)
         return line_statement
-    
+
     def getTemplateData(self, datasource: str) -> dict:
         template_data = {}
         with open(datasource, "r") as f:
             template_data = json.load(f)
         return template_data
-    
+
     def generate_template(self, template_data: dict) -> str:
         template = ""
         for key, value in template_data.items():

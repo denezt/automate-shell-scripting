@@ -2,8 +2,8 @@
 ### Purpose: Project for creating shell scripting using python and javascript object notation
 
 ### Requirements
-1. Python 3.X
-2. PIP 3.X
+1. Python 3.7.X or Higher
+2. PIP 3.7 or Higher
 
 ## Example Usage
 ``` sh
