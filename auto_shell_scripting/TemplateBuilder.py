@@ -56,7 +56,7 @@ class TemplateBuilder:
                 goal = value
             if key == "run":
                 for k in value:
-                    for_statements += self.iterateRun(k)
+                    for_statements += "\t{}".format(self.iterateRun(k))
         if for_statements:
             statement_builder += "for (( {} )) ; do\n".format(goal)
             statement_builder += for_statements
@@ -73,7 +73,7 @@ class TemplateBuilder:
                 goal = value
             if key == "run":
                 for k in value:
-                    while_statements += self.iterateRun(k)
+                    while_statements += "\t{}".format(self.iterateRun(k))
         if while_statements:
             statement_builder += "while [ {} ]; do\n".format(goal)
             statement_builder += while_statements
@@ -104,10 +104,12 @@ class TemplateBuilder:
             if key == "name":
                 name = value
             if key == "statements":               
-                for k in value:                    
-                    if k.keys().__contains__('conditions'):
-                        condition = [ v for k,v in k.items() ][0]
+                for stmt in value:                    
+                    if stmt.keys().__contains__('conditions'):
+                        condition = [ v for k,v in stmt.items() ][0]
                         statements += self.getConditionBuilder(condition)
+                    else:
+                        statements += self.iterateRun(stmt)                        
         if statements:
             statement_builder += "{}(){}".format(name,'{')
             statement_builder += "\t" + statements + "\n"
@@ -121,9 +123,11 @@ class TemplateBuilder:
             if key == "type":
                 run_type = value
             elif run_type == "parameter" and key != "type":
-                line_statement += "\t{} \"{}\"\n".format(key, value)
+                line_statement += "{} \"{}\"\n".format(key, value)
             elif run_type == "declare" and key != "type":
-                line_statement += "\t{}={}\n".format(key, value)
+                line_statement += "{}={}\n".format(key, value)
+            elif run_type == "command_call" and key != "type":
+                line_statement += "{} {}\n".format(key, value)                
         return line_statement
 
     def getTemplateData(self, datasource: str) -> dict:

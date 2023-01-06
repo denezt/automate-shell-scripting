@@ -7,6 +7,11 @@
 
 ## Example Usage
 ``` sh
-$ python py2shell.py --datasource templates/ex1/template_data.json --output template2.sh
+# Create a standard script example
+$ python ./py2shell.py --output standard.sh --datasource templates/standard.json
 ```
 
+``` sh
+# Create a standard script example and make it executeable
+$ python ./py2shell.py --output standard.sh --datasource templates/standard.json --exec
+```
