@@ -14,18 +14,18 @@ class TemplateBuilder:
     def buildIfStatement(self, if_statement: dict) -> str:
         statement_builder = ""
         print("Building, if statement")
-        run = ""
+        if_statements = ""
         goal = ""
         for key, value in if_statement:
             if key == "goal":
                 goal = value
             if key == "run":
-                for k,v in value.items():
-                    run = "{} \"{}\"".format(k, v)
-        if run:
+                for k in value:
+                    if_statements += "\t{}".format(self.iterateRun(k))
+        if if_statements:
             statement_builder += "\n"
             statement_builder += "if [ {} ]; then\n".format(goal)
-            statement_builder += "\t{}\n".format(run)
+            statement_builder += if_statements
             statement_builder += "fi\n"
         return statement_builder
 
@@ -119,15 +119,20 @@ class TemplateBuilder:
     def iterateRun(self, template_data: dict) -> str:
         line_statement = ""
         run_type = ""
-        for key, value in template_data.items():
-            if key == "type":
-                run_type = value
-            elif run_type == "parameter" and key != "type":
-                line_statement += "{} \"{}\"\n".format(key, value)
-            elif run_type == "declare" and key != "type":
-                line_statement += "{}={}\n".format(key, value)
-            elif run_type == "command_call" and key != "type":
-                line_statement += "{} {}\n".format(key, value)                
+        try:
+            for key, value in template_data.items():
+                if key == "type":
+                    run_type = value
+                elif run_type == "parameter" and key != "type":
+                    line_statement += "{} \"{}\"\n".format(key, value)
+                elif run_type == "declare" and key != "type":
+                    line_statement += "{}={}\n".format(key, value)
+                elif run_type == "command_call" and key != "type":
+                    line_statement += "{} {}\n".format(key, value)
+        except AttributeError as ae:
+            print("Check datasource syntax and ensure you are using the correct datatype (array, object)")
+            print(ae)
+            exit(1)
         return line_statement
 
     def getTemplateData(self, datasource: str) -> dict:

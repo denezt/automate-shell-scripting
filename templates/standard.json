@@ -17,23 +17,30 @@
           {
             "type" : "if",
             "goal" : "1 -gt 1",
-            "run" : {
+            "run" : [
+            {
+              "type" : "parameter",
               "printf":"$var1, $var2\\n"
             }
+            ]
           }
         ]
       },
       {
         "conditions": [
-          {
+        {
             "type" : "if",
             "goal" : "1 == 1",
-            "run" : {
-              "printf":"$var3, $var4\\n"
+            "run" : [
+            {
+              "type" : "parameter",
+              "printf": "$var3, $var4\\n"
             }
+            ]
           }
         ]
-      },{
+      },
+      {
         "type" : "command_call",
         "exit": "0"
       }
@@ -44,9 +51,11 @@
     {
       "type" : "if",
       "goal" : "1 == 1",
-      "run" : {
+      "run" : [
+      {
         "printf":"$var1, $var2\\n"
       }
+      ]
     },
     {
       "type" : "case",

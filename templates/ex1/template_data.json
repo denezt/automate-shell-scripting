@@ -11,9 +11,12 @@
     {
       "type" : "if",
       "goal" : "1 == 1",
-      "run" : {
+      "run" : [
+      {
+        "type" :"parameter",
         "printf":"$a, $b\\n"
       }
+      ]
     },
     {
       "type" : "case",
