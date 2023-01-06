@@ -6,8 +6,6 @@ import os
 import string
 import time
 
-import dataclasses
-
 @dataclass
 class TemplateBuilder:
     value: str
@@ -81,6 +79,40 @@ class TemplateBuilder:
             statement_builder += while_statements
             statement_builder += "done\n"
         return statement_builder
+    
+    def getConditionBuilder(self, value) -> str:
+        template = ""
+        for arr in value:
+            # Get Condition Type
+            condition_type = [ v for k,v in arr.items() ][0]
+            if condition_type == "if":
+                template += self.buildIfStatement(arr.items())
+            elif condition_type == "case":
+                template += self.buildCaseStatement(arr.items())
+            elif condition_type == "for":
+                template += self.buildForStatement(arr.items())
+            elif condition_type == "while":
+                template += self.buildWhileStatement(arr.items())
+        return template
+    
+    def buildFunction(self, function: dict) -> str:
+        print("Building, function statement")
+        statement_builder = ""
+        statements = ""
+        name = ""
+        for key, value in function:
+            if key == "name":
+                name = value
+            if key == "statements":               
+                for k in value:                    
+                    if k.keys().__contains__('conditions'):
+                        condition = [ v for k,v in k.items() ][0]
+                        statements += self.getConditionBuilder(condition)
+        if statements:
+            statement_builder += "{}(){}".format(name,'{')
+            statement_builder += "\t" + statements + "\n"
+            statement_builder += "}\n"
+        return statement_builder
 
     def iterateRun(self, template_data: dict) -> str:
         line_statement = ""
@@ -113,16 +145,9 @@ class TemplateBuilder:
                 for k,v in value.items():
                     template += "{}={}\n".format(k,v)
             elif key in [ "conditions" ]:
-                # Iterate 
+                # Iterate
+                template += self.getConditionBuilder(value)
+            elif key in [ "functions" ]:
                 for arr in value:
-                    # Get Condition Type
-                    condition_type = [ v for k,v in arr.items() ][0]
-                    if condition_type == "if":
-                        template += self.buildIfStatement(arr.items())
-                    elif condition_type == "case":
-                        template += self.buildCaseStatement(arr.items())
-                    elif condition_type == "for":
-                        template += self.buildForStatement(arr.items())                
-                    elif condition_type == "while":
-                        template += self.buildWhileStatement(arr.items())                               
+                    template += self.buildFunction(arr.items())
         return template

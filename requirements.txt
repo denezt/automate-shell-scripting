@@ -1,2 +1,2 @@
-dataclasses==0.8
+dataclasses
 requests

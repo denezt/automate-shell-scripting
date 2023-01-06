@@ -1,0 +1,104 @@
+{
+    "shell.type" : "bash",
+    "define.variables" : {
+      "var1": "Hello",
+      "var2": "There",
+      "i": 0,
+      "option": "$1"
+    },
+    "functions": [
+    {
+      "name":"help_menu",
+      "statements": [
+        {
+          "conditions": [
+            {
+              "type" : "if",
+              "goal" : "1 -eq 1",
+              "run" : {
+                "printf":"$var1, $var2\\n"
+              }
+            }
+          ]
+        },
+        {
+          "conditions": [
+            {
+              "type" : "if",
+              "goal" : "1 -gt 1",
+              "run" : {
+                "printf":"$var1, $var2\\n"
+              }
+            }
+          ]
+        }
+      ]
+    }
+    ],
+    "conditions" : [
+      {
+        "type" : "if",
+        "goal" : "1 == 1",
+        "run" : {
+          "printf":"$var1, $var2\\n"
+        }
+      },
+      {
+        "type" : "case",
+        "goal" : "option",
+        "switch" : [
+          {
+            "-a": "printf 'enter statement for value (-a)\\n'"
+          },
+          {
+            "-b": "printf 'enter statement for value (-b)\\n'"
+          },
+          {
+            "-c": "printf 'enter statement for value -c\\n'"
+          }
+        ]
+      },
+      {
+        "type" : "while",
+        "goal" : "$i -lt 10",
+        "run" : [
+          {
+            "type" : "parameter",
+            "printf": "loop...\\n"
+          },{
+            "type" : "declare",
+            "i": "$((i+1))"
+          }
+        ]
+      },{
+        "type" : "case",
+        "goal" : "b",
+        "switch" : [
+          {
+            "-a": "printf 'enter statement for value (-a)\\n'"
+          },
+          {
+            "-b": "printf 'enter statement for value (-b)\\n'"
+          },
+          {
+            "*": "printf 'No value was entered\\n'"
+          }
+        ]
+      },
+      {
+        "type" : "for",
+        "goal" : "i=0; $i < 10; i++",
+        "run" : [
+          {
+            "type" : "declare",
+            "j": "$((j+1))"
+          },{
+            "type" : "parameter",
+            "printf": "loop $j\\n"
+          }
+        ]
+      }
+    ]
+  }
+  
+  
