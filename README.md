@@ -66,6 +66,22 @@ $ source script/basic.sh
 3. The return value is as follows:
 > Bye, There
 
+### Recommendations:
+1. We recommend that you use the Python Virtual Environment.
+2. Execute the following command:
+``` sh
+$ python3.10 -m venv auto_shell
+```
+3. After the virtual environment is created, you can active it via the following command:
+``` sh
+$ source auto_shell/bin/active
+```
+4. Now, the linux prompt will appear as below.
+``` sh
+(auto_shell) root@cyberican-datasets:/current_path$
+```` 
+5. You are in the virtual environment.
+6. If you need to exit later, then you can simply execute the `deactivate` command.
 
 ### Contributors:
 <table>
