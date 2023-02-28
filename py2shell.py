@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import argparse
 from auto_shell_scripting import TemplateBuilder as TemplateBuilder
