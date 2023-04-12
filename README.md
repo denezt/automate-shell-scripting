@@ -45,13 +45,20 @@
 ### Example Usage
 ``` sh
 # Create a standard script example
-$ python ./py2shell.py --output basic.sh --datasource templates/basic.json
+$ ./py2shell.py --output basic.sh --datasource basic
 ```
 
 ``` sh
 # Create a standard script example and make it executeable
-$ python ./py2shell.py --output basic.sh --datasource templates/basic.json --exec
+$ ./py2shell.py --output basic.sh --datasource basic --exec
 ```
+
+### Advanced Examples
+``` sh
+# Create an advanced script example and make it executeable
+$ ./py2shell.py --output basic.sh --datasource shift::shifting_args --exec
+```
+
 
 ### Test your scripts
 1. All script you create are saved into a locally generated directory named **scripts**. 

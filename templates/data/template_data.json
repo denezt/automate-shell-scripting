@@ -1,27 +1,28 @@
 {
-  "shell.type" : "bash",
-  "define.variables" : {
+  "purpose": "A template to test build a generic script.",
+  "shell.type": "bash",
+  "define.variables": {
     "a": "Hello",
     "b": "Bye",
     "c": "World",
     "i": 0,
     "option": "$1"
   },
-  "conditions" : [
+  "conditions": [
     {
-      "type" : "if",
-      "goal" : "1 == 1",
-      "run" : [
-      {
-        "type" :"parameter",
-        "printf":"$a, $b\\n"
-      }
+      "type": "if",
+      "goal": "1 == 1",
+      "run": [
+        {
+          "type": "parameter",
+          "printf": "$a, $b\\n"
+        }
       ]
     },
     {
-      "type" : "case",
-      "goal" : "option",
-      "switch" : [
+      "type": "case",
+      "goal": "option",
+      "switch": [
         {
           "-a": "printf 'enter statement for value (-a)\\n'"
         },
@@ -34,21 +35,23 @@
       ]
     },
     {
-      "type" : "while",
-      "goal" : "$i -lt 10",
-      "run" : [
+      "type": "while",
+      "goal": "$i -lt 10",
+      "run": [
         {
-          "type" : "parameter",
+          "type": "parameter",
           "printf": "loop...\\n"
-        },{
-          "type" : "declare",
+        },
+        {
+          "type": "declare",
           "i": "$((i+1))"
         }
       ]
-    },{
-      "type" : "case",
-      "goal" : "b",
-      "switch" : [
+    },
+    {
+      "type": "case",
+      "goal": "b",
+      "switch": [
         {
           "-a": "printf 'enter statement for value (-a)\\n'"
         },
@@ -61,18 +64,18 @@
       ]
     },
     {
-      "type" : "for",
-      "goal" : "i=0; $i < 10; i++",
-      "run" : [
+      "type": "for",
+      "goal": "i=0; $i < 10; i++",
+      "run": [
         {
-          "type" : "declare",
+          "type": "declare",
           "j": "$((j+1))"
-        },{
-          "type" : "parameter",
+        },
+        {
+          "type": "parameter",
           "printf": "loop $j\\n"
         }
       ]
     }
   ]
 }
-

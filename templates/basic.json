@@ -1,0 +1,32 @@
+{
+  "purpose": "A basic BASH shell script.",
+  "shell.type": "bash",
+  "define.variables": {
+    "var1": "Hello",
+    "var2": "There",
+    "var3": "Bye",
+    "var4": "There"
+  },
+  "onliner": {
+    "printf": [
+      "__BEGIN__",
+      "${var1}",
+      "__SPACE__",
+      "${var2}",
+      "!",
+      "__NEWLINE__",
+      "__END__"
+    ]
+  },
+  "command_call": {
+    "printf": [
+      "__BEGIN__",
+      "${var3}",
+      "__SPACE__",
+      "${var4}",
+      "!",
+      "__NEWLINE__",
+      "__END__"
+    ]
+  }
+}
