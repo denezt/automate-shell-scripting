@@ -1,6 +1,7 @@
 {
-  "shell.type" : "bash",
-  "define.variables" : {
+  "purpose" : "Standard script with help menu, conditions and conditional loops.",
+  "shell.type": "bash",
+  "define.variables": {
     "var1": "Hello",
     "var2": "There",
     "var3": "Bye",
@@ -9,85 +10,88 @@
     "option": "$1"
   },
   "functions": [
-  {
-    "name":"help_menu",
-    "statements": [
-      {
-        "conditions": [
-          {
-            "type" : "if",
-            "goal" : "1 -gt 1",
-            "run" : [
-            {
-              "type" : "parameter",
-              "printf":"$var1, $var2\\n"
-            }
-            ]
-          }
-        ]
-      },
-      {
-        "conditions": [
-        {
-            "type" : "if",
-            "goal" : "1 == 1",
-            "run" : [
-            {
-              "type" : "parameter",
-              "printf": "$var3, $var4\\n"
-            }
-            ]
-          }
-        ]
-      },
-      {
-        "type" : "command_call",
-        "exit": "0"
-      }
-    ]
-  }
-  ],
-  "conditions" : [
     {
-      "type" : "if",
-      "goal" : "1 == 1",
-      "run" : [
-      {
-        "printf":"$var1, $var2\\n"
-      }
+      "name": "help_menu",
+      "statements": [
+        {
+          "conditions": [
+            {
+              "type": "if",
+              "goal": "1 -gt 1",
+              "run": [
+                {
+                  "type": "parameter",
+                  "printf": "$var1, $var2\\n"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "conditions": [
+            {
+              "type": "if",
+              "goal": "1 == 1",
+              "run": [
+                {
+                  "type": "parameter",
+                  "printf": "$var3, $var4\\n"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "command_call",
+          "exit": "0"
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "if",
+      "goal": "1 == 1",
+      "run": [
+        {
+          "type": "parameter",
+          "printf": "$var1, $var2\\n"
+        }
       ]
     },
     {
-      "type" : "case",
-      "goal" : "option",
-      "switch" : [
+      "type": "case",
+      "goal": "option",
+      "switch": [
         {
           "-h|-help|--help": "help_menu"
         }
       ]
     },
     {
-      "type" : "while",
-      "goal" : "$i -lt 10",
-      "run" : [
+      "type": "while",
+      "goal": "$i -lt 10",
+      "run": [
         {
-          "type" : "parameter",
+          "type": "parameter",
           "printf": "loop...\\n"
-        },{
-          "type" : "declare",
+        },
+        {
+          "type": "declare",
           "i": "$((i+1))"
         }
       ]
     },
     {
-      "type" : "for",
-      "goal" : "i=0; $i < 10; i++",
-      "run" : [
+      "type": "for",
+      "goal": "i=0; $i < 10; i++",
+      "run": [
         {
-          "type" : "declare",
+          "type": "declare",
           "j": "$((j+1))"
-        },{
-          "type" : "parameter",
+        },
+        {
+          "type": "parameter",
           "printf": "loop $j\\n"
         }
       ]

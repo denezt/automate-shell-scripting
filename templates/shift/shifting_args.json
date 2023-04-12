@@ -1,0 +1,59 @@
+{
+  "purpose": "An example of using the shift command to pass parameters.",
+  "shell.type": "bash",
+  "define.variables": {
+    "a": "Hello",
+    "b": "Bye",
+    "c": "World",
+    "i": 0,
+    "option": "$1"
+  },
+  "functions": [
+    {
+      "name": "help_menu",
+      "onliner": {
+        "printf": [
+          "__BEGIN__",
+          "$a",
+          "__SPACE__",
+          "$b",
+          "__NEWLINE__",
+          "__END__"
+        ]
+      },
+      "control": {
+        "exit": [
+          "0"
+        ]
+      }
+    }
+  ],
+  "conditions": [
+    {
+      "type": "while",
+      "goal": "$# -gt 0",
+      "run": [
+        {
+          "type": "parameter",
+          "printf": "loop...\\n"
+        },
+        {
+          "conditions": [
+            {
+              "type": "case.nested",
+              "goal": "1",
+              "switch": [
+                {
+                  "-a": "INPUT=$2;echo -ne \"$INPUT\\n\";shift 2;[ -z \"$2\" ] && exit 0"
+                },
+                {
+                  "*": "help_menu"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
