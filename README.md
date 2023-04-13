@@ -29,11 +29,11 @@
     "run" : [
     {
       "type" : "parameter",
-      "printf":"$var1, $var2\\n"
+      "printf": "$var1, $var2\\n"
     },
     {
       "type" : "command_call",
-      "sleep": "1"
+      "sleep": [ "1" ]
     }
     ]
   }

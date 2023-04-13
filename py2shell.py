@@ -10,8 +10,6 @@ parser = argparse.ArgumentParser(
     prog='py2shell', description='Tool for automating shell scripts creation')
 parser.add_argument('--make-executable', action='store_true',
                     default=False, help='Make script executable')
-parser.add_argument('--exec', action='store_true',
-                    default=False, help='Make script executable')
 parser.add_argument('--datasource', type=str, help='Path to JSON data source')
 parser.add_argument('--output', type=str,
                     help='Name of target output script name')
@@ -46,14 +44,14 @@ if '__main__' == __name__:
                         os.mkdir("scripts")
                     with open("scripts/{}".format(output), "w") as f:
                         f.write(template)
-                    if args.make_executable or args.exec:
-                        script_name = "scripts/{}".format(output)
-                        if os.path.isfile(script_name):
-                            print("Making, script executeable")
-                            try:
-                                os.chmod("{}".format(script_name), 777)
-                            except FileNotFoundError as fnfe:
-                                print(fnfe)
+                    script_name = "scripts/{}".format(output)
+                    # Automatically make scripts executeable
+                    if os.path.isfile(script_name):
+                        print("Making, script executeable")
+                        try:
+                            os.chmod("{}".format(script_name), 777)
+                        except FileNotFoundError as fnfe:
+                            print(fnfe)
                     print("Template generated successfully!")
         except AttributeError as ae:
             pass
