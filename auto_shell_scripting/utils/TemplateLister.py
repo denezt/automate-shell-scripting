@@ -5,27 +5,29 @@ import json
 import os
 import string
 import time
+from typing import List
 
 
 @dataclass
 class TemplateLister:
+    purpose: str = " - "
 
     def getTemplates(self, path) -> str:
         results = []
-        purpose = " - "
         for entry in os.listdir(path):
             full_path = os.path.join(path, entry)
             if os.path.isdir(full_path):
                 results.extend(self.getTemplates(full_path))
             else:
-                strOutput = open(full_path,"r")
+                strOutput = open(full_path, "r")
                 obj = json.loads(strOutput.read())
                 try:
-                    purpose += "\033[32m{}".format(obj['purpose'])
+                    self.purpose += "\033[32m{}".format(obj['purpose'])
                 except Exception as e:
-                    purpose = " - \033[31m{}".format('missing purpose')
+                    self.purpose = " - \033[31m{}".format('missing purpose')
                     pass
-                results.append(entry.replace('.json', purpose))
+                results.append(entry.replace('.json', self.purpose))
+                self.purpose = " - "
         return results
 
     def createMenu(self):

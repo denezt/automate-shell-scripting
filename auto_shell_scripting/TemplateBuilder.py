@@ -136,12 +136,12 @@ class TemplateBuilder:
                         condition = [v for k, v in stmt.items()][0]
                         statements += self.getConditionBuilder(condition)
                     else:
-                        statements += self.iterateRun(stmt)
+                        statements += "\t" + self.iterateRun(stmt)
             if key == "control" or key == "onliner":
-                statements += self.buildOnliner(value)
+                statements += "\t" + self.buildOnliner(value)
         if statements:
-            statement_builder += "{}(){}".format(name, '{')
-            statement_builder += statements + "\n"
+            statement_builder += "{}(){}".format(name, '{\n')
+            statement_builder += statements
             statement_builder += "}\n"
         return statement_builder
 
@@ -166,8 +166,9 @@ class TemplateBuilder:
         values = list(value.values())
         for v in values[0]:
             line += self.replaceMetaTag(v)
-        return "\n{} {}".format(key[0], line)
+        return "{} {}\n".format(key[0], line)
 
+    # Normal nested inside of a conditional statement, function and loops
     def iterateRun(self, template_data: dict) -> str:
         line_statement = ""
         run_type = ""
@@ -180,7 +181,7 @@ class TemplateBuilder:
                 elif run_type == "declare" and key != "type":
                     line_statement += "{}={}\n".format(key, value)
                 elif run_type == "command_call" and key != "type":
-                    line_statement += "{} {}\n".format(key, value)
+                    line_statement += self.buildOnliner(dict({key: value}))
         except AttributeError as ae:
             print(
                 "Check datasource syntax and ensure you are using the correct datatype (array, object)")

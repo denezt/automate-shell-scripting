@@ -1,0 +1,68 @@
+{
+    "purpose": "Create a flipping animation",
+    "shell.type": "bash",
+    "define.variables": {
+        "flip": "'/'",
+        "line": "'-'",
+        "backflip": "'\\'"
+    },
+    "conditions": [
+        {
+            "type": "while",
+            "goal": "1 -eq 1",
+            "run": [
+                {
+                    "type": "parameter",
+                    "printf": "${flip}"
+                },
+                {
+                    "type": "command_call",
+                    "sleep": [
+                        "0.",
+                        "1"
+                    ]
+                },
+                {
+                    "type": "command_call",
+                    "clear": [
+                        ";"
+                    ]
+                },
+                {
+                    "type": "parameter",
+                    "printf": "${line}"
+                },
+                {
+                    "type": "command_call",
+                    "sleep": [
+                        "0.",
+                        "1"
+                    ]
+                },
+                {
+                    "type": "command_call",
+                    "clear": [
+                        ";"
+                    ]
+                },
+                {
+                    "type": "parameter",
+                    "printf": "${backflip}"
+                },
+                {
+                    "type": "command_call",
+                    "sleep": [
+                        "0.",
+                        "5"
+                    ]
+                },
+                {
+                    "type": "command_call",
+                    "clear": [
+                        ";"
+                    ]
+                }
+            ]
+        }
+    ]
+}
