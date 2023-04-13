@@ -1,5 +1,7 @@
 #!/bin/bash
 
+main_app='py2shell.py'
+
 initialize() {
 	retry=2
 	_local_utils=('jq')
@@ -11,6 +13,11 @@ initialize() {
 			fi
 		done
 	done
+	if [ -f "${main_app}" ];
+	then
+		printf "\033[33mMaking \033[35m${main_app} \033[33mexecutable...\033[0m\n"
+		sudo chmod a+x "${main_app}"
+	fi
 }
 
 usage() {
