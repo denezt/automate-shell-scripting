@@ -4,6 +4,13 @@ import os
 import argparse
 from auto_shell_scripting import TemplateBuilder as TemplateBuilder
 from auto_shell_scripting.utils import TemplateLister as TemplateLister
+from configparser import ConfigParser
+
+# Get Configuration
+'''
+ @ToDo: Create a configuration parser in order to set parameters
+ and remove static values in code.
+'''
 
 # Set Program Parameters
 parser = argparse.ArgumentParser(
