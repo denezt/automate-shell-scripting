@@ -135,4 +135,4 @@ scripts/**
 backups/**
 tmp/**
 temp/**
-
+tests/__pycache__/**
