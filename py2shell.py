@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
+import sys
 import os
 import argparse
 from auto_shell_scripting import TemplateBuilder as TemplateBuilder
 from auto_shell_scripting.utils import TemplateLister as TemplateLister
+from auto_shell_scripting.utils import TemplateManager as TemplateManager
+
 from configparser import ConfigParser
 
 # Get Configuration
@@ -56,10 +59,12 @@ if '__main__' == __name__:
                     if os.path.isfile(script_name):
                         print("Making, script executeable")
                         try:
-                            os.chmod("{}".format(script_name), 777)
+                            os.chmod("{}".format(script_name), 0o777)
                         except FileNotFoundError as fnfe:
                             print(fnfe)
                     print("Template generated successfully!")
+            else:
+                print("Error: Output script name must end with an '.sh' extension")
         except AttributeError as ae:
             pass
     if view_templates:

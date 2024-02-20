@@ -50,5 +50,5 @@ done
 printf "action:\t$_action\n"
 
 case $_action in
-init | initialize | setup | install) initialize ;;
+	init|initialize|setup|install) initialize;;
 esac
