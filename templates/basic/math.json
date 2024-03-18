@@ -1,5 +1,7 @@
 {
+    "name": "math",
     "purpose": "Random Math Applications",
+    "category": "basic",
     "shell.type": "bash",
     "define.variables": {
         "var1": "1",

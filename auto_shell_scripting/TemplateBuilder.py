@@ -189,12 +189,12 @@ class TemplateBuilder:
             exit(1)
         return line_statement
 
-    def getTemplateData(self, datasource: str) -> dict:
+    def getTemplateData(self, templates, datasource: str) -> dict:
         template_data = {}
         try:
             # Remove extension if present
             datasource = datasource.replace('::', '/')
-            datasource = "templates/{}.json".format(datasource)
+            datasource = "{}/{}.json".format(templates, datasource)            
             if os.path.exists(datasource):
                 with open(datasource, "r") as f:
                     template_data = json.load(f)

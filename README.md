@@ -6,15 +6,21 @@
 ### Purpose: Project for creating shell scripting using python and javascript object notation
 
 ### Requirements
-1. Python 3.10.X or Higher
-2. PIP 3.10 or Higher
+1. Make v4.3+
+2. Python 3.10.X or Higher
+3. PIP 3.10 or Higher
 
 ### How to write a template
 1. First navigate to the templates directory `cd templates`.
-2. Next, create a JSON file and name it _basic.json_ `touch basic.json`.
-3. Add the following code to the JSON file `vi basic.json`.
+2. Create the **category** directory name it __basic__ `mkdir -v basic`.
+3. Change to the __basic__ directory `cd basic`.
+4. Next, create a JSON file and name it _basic.json_ `touch basic.json`.
+5. Add the following code to the JSON file `vi basic.json`.
 ``` json
 {
+  "name": "math",
+  "purpose": "Random Math Applications",
+  "category": "basic",    
   "shell.type" : "bash",
   "define.variables" : {
     "var1": "Hello",
@@ -45,18 +51,18 @@
 ### Example Usage
 ``` sh
 # Create a standard script example
-$ ./py2shell.py --output basic.sh --datasource basic
+$ ./py2shell.py --output basic.sh --datasource basic::basic
 ```
 
 ``` sh
 # Create a standard script example and make it executeable
-$ ./py2shell.py --output basic.sh --datasource basic --exec
+$ ./py2shell.py --output basic.sh --datasource basic::basic --make-executable
 ```
 
 ### Advanced Examples
 ``` sh
 # Create an advanced script example and make it executeable
-$ ./py2shell.py --output basic.sh --datasource shift::shifting_args --exec
+$ ./py2shell.py --output shift.sh --datasource advanced::shifting_args --make-executable
 ```
 
 

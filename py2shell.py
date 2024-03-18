@@ -6,6 +6,7 @@ import argparse
 from auto_shell_scripting import TemplateBuilder as TemplateBuilder
 from auto_shell_scripting.utils import TemplateLister as TemplateLister
 from auto_shell_scripting.utils import TemplateManager as TemplateManager
+from pathlib import Path
 
 from configparser import ConfigParser
 
@@ -39,6 +40,9 @@ datasource = args.datasource
 output = args.output
 view_templates = args.templates
 make_executable = args.make_executable
+template_dir: str = ".py2shell/templates"
+home_dir: str = Path.home()
+template_source: str = f"{home_dir}/{template_dir}"
 
 if '__main__' == __name__:
     if output is not None and datasource is not None:
@@ -46,8 +50,7 @@ if '__main__' == __name__:
             if output.endswith('.sh'):
                 templateBuilder = TemplateBuilder.TemplateBuilder(
                     value="", collector="")
-                template_data = templateBuilder.getTemplateData(
-                    datasource=datasource)
+                template_data = templateBuilder.getTemplateData(templates=template_source, datasource=datasource)
                 # Generate the template
                 template = templateBuilder.generate_template(template_data)
                 print(template)
@@ -74,7 +77,7 @@ if '__main__' == __name__:
         except AttributeError as ae:
             pass
     elif view_templates:
-        t = TemplateLister.TemplateLister()
+        t = TemplateLister.TemplateLister(template_source=template_source)
         t.createMenu()
     else:
         print("Missing target output name or datasource template")

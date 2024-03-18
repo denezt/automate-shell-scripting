@@ -1,5 +1,7 @@
 {
+  "name": "standard",
   "purpose" : "Standard script with help menu, conditions and conditional loops.",
+  "category": "standard",
   "shell.type": "bash",
   "define.variables": {
     "var1": "Hello",

@@ -1,5 +1,7 @@
 {
+    "name": "animation",
     "purpose": "Create a flipping animation",
+    "category": "animators",    
     "shell.type": "bash",
     "define.variables": {
         "flip": "'/'",

@@ -1,5 +1,7 @@
 {
+  "name" : "template_data",
   "purpose": "A template to test build a generic script.",
+  "category" : "default",
   "shell.type": "bash",
   "define.variables": {
     "a": "Hello",

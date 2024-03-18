@@ -1,5 +1,7 @@
-{
+{  
+  "name" : "basic",
   "purpose": "A basic BASH shell script.",
+  "category" : "basic",
   "shell.type": "bash",
   "define.variables": {
     "var1": "Hello",

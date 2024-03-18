@@ -1,5 +1,7 @@
 {
+  "name": "shifting_args",
   "purpose": "An example of using the shift command to pass parameters.",
+  "category": "advanced",
   "shell.type": "bash",
   "define.variables": {
     "a": "Hello",
