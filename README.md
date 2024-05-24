@@ -34,12 +34,21 @@
     "goal" : "1 -eq 1",
     "run" : [
     {
-      "type" : "parameter",
-      "printf": "$var1, $var2\\n"
+      "command_call": {
+        "printf": [
+          "__BEGIN__",
+          "$var1",
+          "__SPACE__",
+          "$var2",
+          "__NEWLINE__",
+          "__END__"
+        ]
+      }
     },
     {
-      "type" : "command_call",
-      "sleep": [ "1" ]
+      "command_call": {
+        "sleep": [ "1" ]
+      }
     }
     ]
   }
