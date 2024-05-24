@@ -17,8 +17,7 @@ from configparser import ConfigParser
 '''
 
 # Set Program Parameters
-parser = argparse.ArgumentParser(
-    prog='py2shell', description='Tool for automating shell scripts creation')
+parser = argparse.ArgumentParser(prog='py2shell', description='Tool for automating shell scripts creation')
 parser.add_argument('--datasource','-ds','--source','-s', type=str, help='Path to JSON data source')
 parser.add_argument('--output','-o', type=str, help='Name of target output script name')
 parser.add_argument('--debug','-d','--verbose','-v', action="store_true", help="Enable debug mode")

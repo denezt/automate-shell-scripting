@@ -1,0 +1,80 @@
+{
+  "name": "data_cleaner",
+  "purpose": "A BASH shell script to clean up a Big Data dataset and save to clean_data.",
+  "category": "data",
+  "shell.type": "bash",
+  "define.variables": {
+    "input_data": "/path/to/big_data_dataset",
+    "output_data": "/path/to/clean_data",
+    "log_file": "/path/to/cleanup.log"
+  },
+  "functions": [
+    {
+      "name": "log_message",
+      "statements" : [
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "LOG MESG:",
+              "__SPACE__",
+              "$1",
+              "__SPACE__",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "help_menu",
+      "statements": [
+      {
+        "command_call": {
+          "printf": [
+            "__BEGIN__",
+            "Parse Data",
+            "__SPACE__",
+            "[",
+            "__SPACE__",
+            "-p,",
+            "__SPACE__",
+            "--parse",
+            "__SPACE__",
+            "]",
+            "__NEWLINE__",
+            "__END__"
+          ]
+        }
+      },      
+      {
+        "command_call": {
+          "printf": [
+            "__BEGIN__",
+            "Clean Data",
+            "__SPACE__",
+            "[",
+            "__SPACE__",
+            "-c,",
+            "__SPACE__",
+            "--clean",
+            "__SPACE__",
+            "]",
+            "__NEWLINE__",
+            "__END__"
+          ]
+        }
+      }
+      ]
+    }
+  ],
+  "command_call": {
+    "log_message": [
+      "__BEGIN__",  
+      "Starting cleanup script...",
+      "__END__"
+    ]
+  },
+  "function_call": "help_menu"  
+}

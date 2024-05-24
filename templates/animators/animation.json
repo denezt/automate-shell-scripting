@@ -14,55 +14,74 @@
             "goal": "1 -eq 1",
             "run": [
                 {
-                    "type": "parameter",
-                    "printf": "${flip}"
+                    "command_call" : {
+                        "printf": [                            
+                            "__BEGIN__",
+                            "${flip}",
+                            "__END__"
+                        ]
+                    }
                 },
                 {
-                    "type": "command_call",
-                    "sleep": [
-                        "0.",
-                        "1"
-                    ]
+                    "command_call" : {
+                        "sleep": [
+                            "0.1"
+                        ]
+                    }
                 },
                 {
-                    "type": "command_call",
-                    "clear": [
-                        ";"
-                    ]
+                    "command_call" : {
+                        "clear": [
+                            ";"
+                        ]
+                    }
                 },
                 {
-                    "type": "parameter",
-                    "printf": "${line}"
+                    "command_call":{
+                        "printf": [
+                            "__BEGIN__",
+                            "${line}",
+                            "__END__"
+                        ]
+                    }
                 },
                 {
-                    "type": "command_call",
-                    "sleep": [
-                        "0.",
-                        "1"
-                    ]
+                    "command_call" : {
+                        "clear": [
+                            ";"
+                        ]
+                    }
                 },
                 {
-                    "type": "command_call",
-                    "clear": [
-                        ";"
-                    ]
+                    "command_call": {
+                        "clear": [
+                            ";"
+                        ]
+                    }
                 },
                 {
-                    "type": "parameter",
-                    "printf": "${backflip}"
+                    "command_call":
+                    {
+                        "printf": [
+                            "__BEGIN__",
+                            "${backflip}",
+                            "__END__"
+                        ]
+                    }
                 },
                 {
-                    "type": "command_call",
-                    "sleep": [
-                        "0.",
-                        "5"
-                    ]
+                    "command_call": {
+                        "sleep": [
+                            "0.5"
+                        ]
+                    }
                 },
                 {
-                    "type": "command_call",
-                    "clear": [
-                        ";"
-                    ]
+                    "command_call": {
+                        "clear": [
+                            ";"
+                        ]
+                    }
                 }
             ]
         }

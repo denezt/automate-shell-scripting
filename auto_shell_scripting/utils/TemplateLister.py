@@ -23,7 +23,7 @@ class TemplateLister:
                 results.extend(self.getTemplates(full_path))
             else:
                 strOutput = open(full_path, "r")
-                obj = json.loads(strOutput.read())                
+                obj = json.loads(strOutput.read())
                 template_obj["category"] = "\033[33m{}".format(obj['category'])
                 template_obj["name"] = "\033[32m{}".format(obj["name"])
                 template_obj["purpose"] = "\033[35m{}".format(obj['purpose'])
