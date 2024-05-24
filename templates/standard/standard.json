@@ -22,8 +22,16 @@
               "goal": "1 -gt 1",
               "run": [
                 {
-                  "type": "parameter",
-                  "printf": "$var1, $var2\\n"
+                  "command_call": {
+                    "printf": [
+                      "__BEGIN__",
+                      "$var1",
+                      "__SPACE__",
+                      "$var2",
+                      "__NEWLINE__",
+                      "__END__"
+                    ]
+                  }
                 }
               ]
             }
@@ -36,16 +44,25 @@
               "goal": "1 == 1",
               "run": [
                 {
-                  "type": "parameter",
-                  "printf": "$var3, $var4\\n"
+                  "command_call": {
+                    "printf": [
+                      "__BEGIN__",
+                      "$var3",
+                      "__SPACE__",
+                      "$var4",
+                      "__NEWLINE__",
+                      "__END__"
+                    ]
+                  }
                 }
               ]
             }
           ]
         },
         {
-          "type": "command_call",
-          "exit": "0"
+          "command_call" : {
+            "exit": [ "0" ]
+          }
         }
       ]
     }
@@ -55,9 +72,17 @@
       "type": "if",
       "goal": "1 == 1",
       "run": [
-        {
-          "type": "parameter",
-          "printf": "$var1, $var2\\n"
+        {        
+            "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "$var1",
+              "__SPACE__",
+              "$var2",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
         }
       ]
     },
@@ -75,12 +100,19 @@
       "goal": "$i -lt 10",
       "run": [
         {
-          "type": "parameter",
-          "printf": "loop...\\n"
+          "command_call": {
+            "printf": [ 
+              "__BEGIN__",
+              "loop...",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
         },
         {
-          "type": "declare",
-          "i": "$((i+1))"
+          "declare": {
+            "i": "$((i+1))"
+          }
         }
       ]
     },
@@ -89,12 +121,21 @@
       "goal": "i=0; $i < 10; i++",
       "run": [
         {
-          "type": "declare",
-          "j": "$((j+1))"
+          "declare": {
+            "j": "$((j+1))"
+          }
         },
         {
-          "type": "parameter",
-          "printf": "loop $j\\n"
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "looping:",
+              "__SPACE__",
+              " $j",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
         }
       ]
     }

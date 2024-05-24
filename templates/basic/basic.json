@@ -9,7 +9,7 @@
     "var3": "Bye",
     "var4": "There"
   },
-  "onliner": {
+  "oneliner": {
     "printf": [
       "__BEGIN__",
       "${var1}",

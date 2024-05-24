@@ -1,6 +1,6 @@
 {
-  "name": "shifting_args",
-  "purpose": "An example of using the shift command to pass parameters.",
+  "name": "shifting_args_extended",
+  "purpose": "An extended example of using the shift command to pass parameters.",
   "category": "advanced",
   "shell.type": "bash",
   "define.variables": {
@@ -13,7 +13,7 @@
   "functions": [
     {
       "name": "help_menu",
-      "onliner": {
+      "oneliner": {
         "printf": [
           "__BEGIN__",
           "$a",
@@ -49,7 +49,7 @@
           "conditions": [
             {
               "type": "case.nested",
-              "goal": "option",
+              "goal": "1",
               "switch": [
                 {
                   "-a": "INPUT=$2;echo -ne \"$INPUT\\n\";shift 2;[ -z \"$2\" ] && exit 0"
@@ -60,6 +60,9 @@
               ]
             }
           ]
+        },
+        {
+          "function_call" : "help_menu"
         }
       ]
     }

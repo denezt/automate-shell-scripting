@@ -136,9 +136,10 @@ class TemplateBuilder:
                         condition = [v for k, v in stmt.items()][0]
                         statements += self.getConditionBuilder(condition)
                     else:
+                        print(f"Build Function [stmt]: {stmt}")
                         statements += "\t" + self.iterateRun(stmt)
-            if key == "control" or key == "onliner":
-                statements += "\t" + self.buildOnliner(value)
+            if key in [ "control", "oneliner" ]:
+                statements += "\t" + self.buildOneliner(value)
         if statements:
             statement_builder += "{}(){}".format(name, '{\n')
             statement_builder += statements
@@ -160,31 +161,38 @@ class TemplateBuilder:
             line += self.replaceMetaTag(v)
         return "\n{} {}".format(key[0], line)
 
-    def buildOnliner(self, value: dict) -> str:
+    def buildOneliner(self, value: dict) -> str:
         line = ""
         key = list(value.keys())
         values = list(value.values())
+        print(f"Build Oneliner [key0, values]: {key}, {values}")
         for v in values[0]:
             line += self.replaceMetaTag(v)
         return "{} {}\n".format(key[0], line)
 
     # Normal nested inside of a conditional statement, function and loops
     def iterateRun(self, template_data: dict) -> str:
+        print(f"Template Data [iterateRun]: {type(template_data)} => {template_data}")
         line_statement = ""
         run_type = ""
         try:
             for key, value in template_data.items():
-                if key == "type":
-                    run_type = value
-                elif run_type == "parameter" and key != "type":
-                    line_statement += "{} \"{}\"\n".format(key, value)
-                elif run_type == "declare" and key != "type":
-                    line_statement += "{}={}\n".format(key, value)
-                elif run_type == "command_call" and key != "type":
-                    line_statement += self.buildOnliner(dict({key: value}))
+                print(key, value)                
+                # if key == "parameter" and key != "type":
+                if key == "parameter":
+                    for k in value.keys():
+                        line_statement += "{} {}\n".format(k, value[k])
+                elif key == "declare":
+                    for k in value.keys():
+                        line_statement += "{}={}\n".format(k, value[k])             
+                elif key == "command_call":
+                    print(value.keys())
+                    for k in value.keys():
+                        line_statement += self.buildOneliner(dict({k: value[k]}))
+                elif key == "function_call":
+                    line_statement += value + "\n"
         except AttributeError as ae:
-            print(
-                "Check datasource syntax and ensure you are using the correct datatype (array, object)")
+            print("Check datasource syntax and ensure you are using the correct datatype (array, object)")
             print(ae)
             exit(1)
         return line_statement
@@ -194,7 +202,7 @@ class TemplateBuilder:
         try:
             # Remove extension if present
             datasource = datasource.replace('::', '/')
-            datasource = "{}/{}.json".format(templates, datasource)            
+            datasource = "{}/{}.json".format(templates, datasource)
             if os.path.exists(datasource):
                 with open(datasource, "r") as f:
                     template_data = json.load(f)
@@ -226,8 +234,8 @@ class TemplateBuilder:
             elif key in ["functions"]:
                 for arr in value:
                     template += self.buildFunction(arr.items())
-            elif key in ["control"] or key in ["command_call"]:
+            elif key in ["control", "command_call"]:
                 template += self.buildControl(value)
-            elif key in ["onliner"]:
-                template += self.buildOnliner(value)
+            elif key in ["oneliner"]:
+                template += self.buildOneliner(value)
         return template
