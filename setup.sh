@@ -42,6 +42,21 @@ initialize() {
 	printf "\033[32mInitialization process is complete!!!\033[0m\n"
 }
 
+resync_templates(){
+	userpath="${HOME}/.py2shell"
+	if [ ! -d "${userpath}" ];
+	then
+		mkdir -vp "${userpath}"
+	fi
+	if [ -d "${template_dir}" ];
+	then
+		printf "\033[1;36mPushing, $(ls ${template_dir} | wc -l) templates\033[0m\n"
+		cp -a -v "${template_dir}" "${userpath}"
+	else
+		error "Missing or unable to locate templates directory"
+	fi
+}
+
 usage() {
 	printf "\033[36mUSAGE:\033[0m\n"
 	printf "\033[35m$0 \033[33m--action=\033[32mCOMMAND\033[0m\n"
@@ -50,7 +65,8 @@ usage() {
 
 commands() {
 	printf "\033[36mCOMMANDS:\033[0m\n"
-	printf "\033[35mInitial Install \033[32m[ init, initialize, setup, install ]\033[0m\n"
+	printf "\033[35mInitial Install\t\t\033[32m[ init, initialize, setup, install ]\033[0m\n"
+	printf "\033[35mUpdate Templates\t\033[32m[ push, resync, update ]\033[0m\n"
 	printf "\n"
 }
 
@@ -72,4 +88,5 @@ done
 
 case $_action in
 	init|initialize|setup|install) initialize;;
+	push|resync|update) resync_templates;;
 esac
