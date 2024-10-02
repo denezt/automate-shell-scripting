@@ -1,6 +1,6 @@
 {
-  "name": "data_cleaner",
-  "purpose": "A BASH shell script to clean up a Big Data dataset and save to clean_data.",
+  "name": "data_cleaner_revised",
+  "purpose": "A BASH revised shell script to clean up a Big Data dataset and save to clean_data.",
   "category": "data",
   "shell.type": "bash",
   "define.variables": {

@@ -18,7 +18,7 @@
         {
           "conditions": [
             {
-              "type": "if",
+              "type": "if.nested",
               "goal": "1 -gt 1",
               "run": [
                 {
@@ -40,7 +40,7 @@
         {
           "conditions": [
             {
-              "type": "if",
+              "type": "if.nested",
               "goal": "1 == 1",
               "run": [
                 {
@@ -72,7 +72,7 @@
       "type": "if",
       "goal": "1 == 1",
       "run": [
-        {        
+        {
             "command_call": {
             "printf": [
               "__BEGIN__",
@@ -101,7 +101,7 @@
       "run": [
         {
           "command_call": {
-            "printf": [ 
+            "printf": [
               "__BEGIN__",
               "loop...",
               "__NEWLINE__",

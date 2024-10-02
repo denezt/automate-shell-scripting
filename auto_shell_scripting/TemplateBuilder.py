@@ -14,7 +14,7 @@ class TemplateBuilder:
 
     def buildIfStatement(self, if_statement: dict) -> str:
         statement_builder = ""
-        print("Building, if statement")
+        print("\033[35mBuilding, if statement\033[0m")
         if_statements = ""
         goal = ""
         for key, value in if_statement:
@@ -26,12 +26,12 @@ class TemplateBuilder:
         if if_statements:
             statement_builder += "\n"
             statement_builder += "if [ {} ]; then\n".format(goal)
-            statement_builder += if_statements
+            statement_builder += "{}".format(if_statements)
             statement_builder += "fi\n"
-        return statement_builder
-
+        return statement_builder  
+    
     def buildCaseStatement(self, case_statement: dict) -> str:
-        print("Building, case statement")
+        print("\033[35mBuilding, case statement\033[0m")
         switch_array = ""
         statement_builder = ""
         goal = ""
@@ -48,8 +48,26 @@ class TemplateBuilder:
         statement_builder += "esac\n"
         return statement_builder
 
+    def buildNestedIfStatement(self, if_statement: dict) -> str:
+        statement_builder = ""
+        print("\033[35mBuilding, nested if statement\033[0m")
+        if_statements = ""
+        goal = ""
+        for key, value in if_statement:
+            if key == "goal":
+                goal = value
+            if key == "run":
+                for k in value:
+                    if_statements += "\t{}".format(self.iterateRun(k))
+        if if_statements:
+            statement_builder += "\n"
+            statement_builder += "\tif [ {} ]; then\n".format(goal)
+            statement_builder += "\t{}".format(if_statements)
+            statement_builder += "\tfi\n"
+        return statement_builder
+
     def buildNestedCaseStatement(self, case_statement: dict) -> str:
-        print("Building, case statement")
+        print("\033[35mBuilding, nested case statement\033[0m")
         switch_array = ""
         statement_builder = ""
         goal = ""
@@ -67,7 +85,7 @@ class TemplateBuilder:
         return statement_builder
 
     def buildForStatement(self, loop_statement: dict) -> str:
-        print("Building, loop statement")
+        print("\033[35mBuilding, loop statement\033[0m")
         statement_builder = ""
         for_statements = ""
         goal = ""
@@ -84,7 +102,7 @@ class TemplateBuilder:
         return statement_builder
 
     def buildWhileStatement(self, loop_statement: dict) -> str:
-        print("Building, loop statement")
+        print("\033[35mBuilding, loop statement\033[0m")
         statement_builder = ""
         while_statements = ""
         goal = ""
@@ -114,6 +132,8 @@ class TemplateBuilder:
                 template += self.buildIfStatement(arr.items())
             elif condition_type == "case":
                 template += self.buildCaseStatement(arr.items())
+            elif condition_type == "if.nested":
+                template += self.buildNestedIfStatement(arr.items())
             elif condition_type == "case.nested":
                 template += self.buildNestedCaseStatement(arr.items())
             elif condition_type == "for":
@@ -123,7 +143,7 @@ class TemplateBuilder:
         return template
 
     def buildFunction(self, function: dict) -> str:
-        print("Building, function statement")
+        print("\033[35mBuilding, function statement\033[0m")
         statement_builder = ""
         statements = ""
         name = ""
@@ -133,16 +153,16 @@ class TemplateBuilder:
             if key == "statements":
                 for stmt in value:
                     if stmt.keys().__contains__('conditions'):
-                        condition = [v for k, v in stmt.items()][0]
+                        condition = [ v for k, v in stmt.items()][0]
                         statements += self.getConditionBuilder(condition)
                     else:
-                        print(f"Build Function [stmt]: {stmt}")
+                        print(f"\033[35mBuild Function [stmt]:\033[32m {stmt}\033[0m")
                         statements += "\t" + self.iterateRun(stmt)
             if key in [ "control", "oneliner" ]:
                 statements += "\t" + self.buildOneliner(value)
         if statements:
             statement_builder += "{}(){}".format(name, '{\n')
-            statement_builder += statements
+            statement_builder += "{}".format(statements)
             statement_builder += "}\n"
         return statement_builder
 
@@ -165,14 +185,14 @@ class TemplateBuilder:
         line = ""
         key = list(value.keys())
         values = list(value.values())
-        print(f"Build Oneliner [key0, values]: {key}, {values}")
+        print(f"\033[35mBuild Oneliner [key0, values]: \033[32m{key}, {values}\033[0m")
         for v in values[0]:
             line += self.replaceMetaTag(v)
         return "{} {}\n".format(key[0], line)
 
     # Normal nested inside of a conditional statement, function and loops
     def iterateRun(self, template_data: dict) -> str:
-        print(f"Template Data [iterateRun]: {type(template_data)} => {template_data}")
+        print(f"\033[35mTemplate Data [iterateRun]: \033[33m{type(template_data)} \033[35m=> \033[32m{template_data}\033[0m")
         line_statement = ""
         run_type = ""
         try:
@@ -192,8 +212,8 @@ class TemplateBuilder:
                 elif key == "function_call":
                     line_statement += value + "\n"
         except AttributeError as ae:
-            print("Check datasource syntax and ensure you are using the correct datatype (array, object)")
-            print(ae)
+            print("\033[35mCheck datasource syntax and ensure you are using the correct datatype (array, object)\033[0m")
+            print("\033[31m{}\033[0m".format(ae))
             exit(1)
         return line_statement
 
@@ -211,7 +231,7 @@ class TemplateBuilder:
                     datasource))
         except Exception as e:
             print(
-                "Error: Missing or unable to find template (name: {})".format(datasource))
+                "\033[35mError: \033[31mMissing or unable to find template (name: {})\033[0m".format(datasource))
         return template_data
 
     def generate_template(self, template_data: dict) -> str:
@@ -221,7 +241,7 @@ class TemplateBuilder:
                 print("\033[36mPURPOSE: \033[33m{}\033[0m".format(value))
             # Writes the initial shell
             if key in ["shell.type"]:
-                print("Shell Type is {}".format(value))
+                print("\033[36mShell Type is \033[36m{}\033[0m".format(value))
                 template += "#!/usr/bin/env {}\n\n".format(value)
                 # template += "set -x\n\n"
             elif key in ["define.variables"]:
