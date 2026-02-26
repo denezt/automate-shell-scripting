@@ -6,7 +6,6 @@ import os
 import string
 import time
 
-
 @dataclass
 class TemplateBuilder:
     value: str
@@ -28,8 +27,8 @@ class TemplateBuilder:
             statement_builder += "if [ {} ]; then\n".format(goal)
             statement_builder += "{}".format(if_statements)
             statement_builder += "fi\n"
-        return statement_builder  
-    
+        return statement_builder
+
     def buildCaseStatement(self, case_statement: dict) -> str:
         print("\033[35mBuilding, case statement\033[0m")
         switch_array = ""
@@ -197,14 +196,14 @@ class TemplateBuilder:
         run_type = ""
         try:
             for key, value in template_data.items():
-                print(key, value)                
+                print(key, value)
                 # if key == "parameter" and key != "type":
                 if key == "parameter":
                     for k in value.keys():
                         line_statement += "{} {}\n".format(k, value[k])
                 elif key == "declare":
                     for k in value.keys():
-                        line_statement += "{}={}\n".format(k, value[k])             
+                        line_statement += "{}={}\n".format(k, value[k])
                 elif key == "command_call":
                     print(value.keys())
                     for k in value.keys():

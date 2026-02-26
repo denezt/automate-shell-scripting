@@ -1,0 +1,495 @@
+{
+  "name": "network_status",
+  "purpose": "Check operating system and network status (summary + detailed diagnostics).",
+  "category": "network",
+  "shell.type": "bash",
+  "define.variables": {
+    "option": "$1",
+    "iface": "",
+    "target": "1.1.1.1",
+    "dns_name": "example.com",
+    "dns_server": "",
+    "mode": "summary",
+    "timeout": "2",
+    "count": "2",
+    "json": "0"
+  },
+  "functions": [
+    {
+      "name": "help_menu",
+      "statements": [
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "Network Status Checker",
+              "__NEWLINE__",
+              "Usage:",
+              "__NEWLINE__",
+              "  network_status.sh [options]",
+              "__NEWLINE__",
+              "__NEWLINE__",
+              "Options:",
+              "__NEWLINE__",
+              "  -s, --summary             Summary (default)",
+              "__NEWLINE__",
+              "  -d, --details             Detailed diagnostics",
+              "__NEWLINE__",
+              "  -i, --iface <name>        Focus on interface (e.g., eth0, wlan0)",
+              "__NEWLINE__",
+              "  -t, --target <ip/host>    Ping target (default: 1.1.1.1)",
+              "__NEWLINE__",
+              "  -n, --name <domain>       DNS lookup name (default: example.com)",
+              "__NEWLINE__",
+              "      --dns <server>        DNS server (optional, e.g., 8.8.8.8)",
+              "__NEWLINE__",
+              "      --json                Print key results as JSON-ish lines",
+              "__NEWLINE__",
+              "  -h, --help                Show help",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        },
+        { "command_call": { "exit": ["0"] } }
+      ]
+    },
+    {
+      "name": "have_cmd",
+      "statements": [
+        {
+          "command_call": {
+            "command": [
+              "-v \"$1\" >/dev/null 2>&1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "banner",
+      "statements": [
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "=== OS & Network Status ===",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "os_info",
+      "statements": [
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "[ -f /etc/os-release ]",
+              "run": [
+                {
+                  "command_call": {
+                    "printf": [
+                      "__BEGIN__",
+                      "OS:",
+                      "__SPACE__",
+                      "$( . /etc/os-release; echo \"$PRETTY_NAME\" )",
+                      "__NEWLINE__",
+                      "__END__"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "Kernel:",
+              "__SPACE__",
+              "$(uname -srmo 2>/dev/null || uname -a)",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "net_ifaces",
+      "statements": [
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "__NEWLINE__",
+              "-- Interfaces & IPs --",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "command -v ip >/dev/null 2>&1",
+              "run": [
+                {
+                  "conditions": [
+                    {
+                      "type": "if.nested",
+                      "goal": "[ -n \"$iface\" ]",
+                      "run": [
+                        { "command_call": { "sh": ["-c \"ip -br addr show dev \\\"$iface\\\" 2>/dev/null || ip addr show dev \\\"$iface\\\"\""] } }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "conditions": [
+                    {
+                      "type": "if.nested",
+                      "goal": "[ -z \"$iface\" ]",
+                      "run": [
+                        { "command_call": { "sh": ["-c \"ip -br addr 2>/dev/null || ip addr\""] } }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "! command -v ip >/dev/null 2>&1 && command -v ifconfig >/dev/null 2>&1",
+              "run": [
+                {
+                  "conditions": [
+                    {
+                      "type": "if.nested",
+                      "goal": "[ -n \"$iface\" ]",
+                      "run": [
+                        { "command_call": { "sh": ["-c \"ifconfig \\\"$iface\\\"\""] } }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "conditions": [
+                    {
+                      "type": "if.nested",
+                      "goal": "[ -z \"$iface\" ]",
+                      "run": [
+                        { "command_call": { "sh": ["-c \"ifconfig -a\""] } }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "routes",
+      "statements": [
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "__NEWLINE__",
+              "-- Routing --",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "command -v ip >/dev/null 2>&1",
+              "run": [
+                { "command_call": { "sh": ["-c \"ip route 2>/dev/null\""] } }
+              ]
+            }
+          ]
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "! command -v ip >/dev/null 2>&1 && command -v netstat >/dev/null 2>&1",
+              "run": [
+                { "command_call": { "sh": ["-c \"netstat -rn 2>/dev/null\""] } }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dns_check",
+      "statements": [
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "__NEWLINE__",
+              "-- DNS --",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "[ -f /etc/resolv.conf ]",
+              "run": [
+                { "command_call": { "sh": ["-c \"printf 'resolv.conf:\\n'; sed -n '1,120p' /etc/resolv.conf 2>/dev/null\""] } }
+              ]
+            }
+          ]
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "command -v dig >/dev/null 2>&1",
+              "run": [
+                {
+                  "conditions": [
+                    {
+                      "type": "if.nested",
+                      "goal": "[ -n \"$dns_server\" ]",
+                      "run": [
+                        { "command_call": { "sh": ["-c \"dig +time=2 +tries=1 @\\\"$dns_server\\\" \\\"$dns_name\\\" A +short 2>/dev/null\""] } }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "conditions": [
+                    {
+                      "type": "if.nested",
+                      "goal": "[ -z \"$dns_server\" ]",
+                      "run": [
+                        { "command_call": { "sh": ["-c \"dig +time=2 +tries=1 \\\"$dns_name\\\" A +short 2>/dev/null\""] } }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "! command -v dig >/dev/null 2>&1 && command -v getent >/dev/null 2>&1",
+              "run": [
+                { "command_call": { "sh": ["-c \"getent hosts \\\"$dns_name\\\" 2>/dev/null\""] } }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "connectivity",
+      "statements": [
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "__NEWLINE__",
+              "-- Connectivity (ping) --",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "command -v ping >/dev/null 2>&1",
+              "run": [
+                {
+                  "command_call": {
+                    "sh": [
+                      "-c \"ping -c \\\"$count\\\" -W \\\"$timeout\\\" \\\"$target\\\" 2>/dev/null || ping -c \\\"$count\\\" \\\"$target\\\" 2>/dev/null\""
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sockets",
+      "statements": [
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "__NEWLINE__",
+              "-- Sockets (listening) --",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "command -v ss >/dev/null 2>&1",
+              "run": [
+                { "command_call": { "sh": ["-c \"ss -tulpen 2>/dev/null | sed -n '1,120p'\""] } }
+              ]
+            }
+          ]
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "! command -v ss >/dev/null 2>&1 && command -v netstat >/dev/null 2>&1",
+              "run": [
+                { "command_call": { "sh": ["-c \"netstat -pnltu 2>/dev/null | sed -n '1,120p'\""] } }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "summary",
+      "statements": [
+        { "function_call": "banner" },
+        { "function_call": "os_info" },
+        {
+          "command_call": {
+            "printf": [
+              "__BEGIN__",
+              "__NEWLINE__",
+              "-- Quick Summary --",
+              "__NEWLINE__",
+              "__END__"
+            ]
+          }
+        },
+        {
+          "command_call": {
+            "sh": [
+              "-c \"printf 'Hostname: %s\\n' \\\"$(hostname 2>/dev/null)\\\"; printf 'Default route: '; (ip route 2>/dev/null | awk '/default/ {print $3; exit}' || true); printf '\\n'; printf 'Public IP (if curl exists): '; (command -v curl >/dev/null 2>&1 && curl -fsS --max-time 3 https://api.ipify.org 2>/dev/null || echo 'n/a'); echo\""
+            ]
+          }
+        },
+        {
+          "conditions": [
+            {
+              "type": "if.nested",
+              "goal": "[ \"$json\" -eq 1 ]",
+              "run": [
+                {
+                  "command_call": {
+                    "sh": [
+                      "-c \"printf '{\\n'; printf '  \\\"hostname\\\": \\\"%s\\\",\\n' \\\"$(hostname 2>/dev/null)\\\"; printf '  \\\"target\\\": \\\"%s\\\",\\n' \\\"$target\\\"; printf '  \\\"iface\\\": \\\"%s\\\"\\n' \\\"${iface:-all}\\\"; printf '}\\n'\""
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "details",
+      "statements": [
+        { "function_call": "summary" },
+        { "function_call": "net_ifaces" },
+        { "function_call": "routes" },
+        { "function_call": "dns_check" },
+        { "function_call": "connectivity" },
+        { "function_call": "sockets" }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "while",
+      "goal": "$# -gt 0",
+      "run": [
+        {
+          "conditions": [
+            {
+              "type": "case.nested",
+              "goal": "1",
+              "switch": [
+                {
+                  "-h|--help": "help_menu"
+                },
+                {
+                  "-s|--summary": "mode=summary; shift"
+                },
+                {
+                  "-d|--details": "mode=details; shift"
+                },
+                {
+                  "-i|--iface": "iface=$2; shift 2"
+                },
+                {
+                  "-t|--target": "target=$2; shift 2"
+                },
+                {
+                  "-n|--name": "dns_name=$2; shift 2"
+                },
+                {
+                  "--dns": "dns_server=$2; shift 2"
+                },
+                {
+                  "--json": "json=1; shift"
+                },
+                {
+                  "*": "printf 'Unknown option: %s\\n' \"$1\"; help_menu"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "if",
+      "goal": "[ \"$mode\" = \"details\" ]",
+      "run": [
+        { "function_call": "details" }
+      ]
+    },
+    {
+      "type": "if",
+      "goal": "[ \"$mode\" = \"summary\" ]",
+      "run": [
+        { "function_call": "summary" }
+      ]
+    }
+  ]
+}
